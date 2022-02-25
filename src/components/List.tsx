@@ -1,4 +1,7 @@
 import React, { useCallback, useReducer, useRef } from 'react';
+import { Box, Button, Flex, SimpleGrid } from '@chakra-ui/react';
+
+import './List.css';
 
 interface ISingleTodo {
     id: number,
@@ -30,49 +33,39 @@ const List = () => {
                 name: newToDo.current?.value,
                 isCompleted: false
             })
+            localStorage.setItem('myTodos', `${todos}`);
             newToDo.current.value = "";
+
         }
 
-    }, []);
-
-    const onRemoveTodo = useCallback((id) => {
-        dispatch({
-            type: "REMOVE",
-            id: id
-
-        })
     }, []);
 
     const newToDo = useRef<HTMLInputElement>(null)
     return (
         <div>
-            <input type="text" ref={newToDo} />
-            <button onClick={onCreateTodo}>Create</button>
-            <table>
-                <thead>
-                    <tr>
-                        <td>Id</td>
-                        <td>Task Name</td>
-                        <td>isCompleted</td>
-                        <td>Delete</td>
-                    </tr>
-                </thead>
-                <tbody>
+            <Box bg='tomato' w='100%' m={"auto"} p={4} color='white'>
+                <Flex align={"center"} justify={"center"}>
+                    <input className='todo_input' type="text" ref={newToDo} />
+                    <button className='create_btn' onClick={onCreateTodo}>Create</button>
+                </Flex>
+            </Box>
+
+            <Box className='todo_items' pt="20">
+                <SimpleGrid columns={2} spacingX='40px' spacingY='20px'>
                     {
-                        todos.map((singleToDo) => (
-                            <tr key={singleToDo.id}>
-                                <td>{singleToDo.id}</td>
-                                <td>{singleToDo.name}</td>
-                                <td>{singleToDo.isCompleted}</td>
-                                <td><button onClick={onRemoveTodo}>Remove</button></td>
-                            </tr>
+                        todos.map((singleTodo) => (
+                            <Box className='single_item' key={singleTodo.id} bg='tomato' height='80px'>
+                                <h3>{singleTodo.name}</h3>
+                                <Button className='remove_btn' onClick={(id) => dispatch({ type: "REMOVE", id: singleTodo.id })}>Remove</Button>
+                            </Box>
+
                         ))
                     }
 
-                </tbody>
-            </table>
+                </SimpleGrid>
+            </Box>
         </div>
     )
 }
 
-export default List
+export default List;

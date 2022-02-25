@@ -1,10 +1,14 @@
 import React from 'react';
+import Header from './components/Header';
 import List from './components/List';
 
 function App() {
   return (
     <div>
-      <List />
+      <Header />
+      <div className='list_items'>
+        <List />
+      </div>
     </div>
   );
 }
